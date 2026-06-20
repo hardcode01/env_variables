@@ -27,8 +27,8 @@ jobs:
         run: npm ci
       - name: Display variables
         run: |
-          echo "MONGODB_USERNAME=${{ MONGODB_USERNAME }}"
-          echo "MONGODB_PASSWORD=${{ MONGODB_PASSWORD }}"
+          echo "MONGODB_USERNAME: ${{ MONGODB_USERNAME }}"
+          echo "MONGODB_PASSWORD: ${{ MONGODB_PASSWORD }}"
       - name: Run server
         run: npm start & npx wait-on http://127.0.0.1:${{ env.PORT }}
       - name: Run tests
