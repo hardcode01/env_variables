@@ -12,8 +12,8 @@ jobs:
   test:
     env:
       MONGODB_CLUSTER_ADDRESS: cluster0.avt7kr9.mongodb.net
-      MONGODB_USERNAME: megapihor
-      MONGODB_PASSWORD: 9fMoAIGVdr2eUoI6
+      MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
     runs-on: ubuntu-latest
     steps:
       - name: Get Code
@@ -25,10 +25,10 @@ jobs:
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
-      - name: Fix DNS for MongoDB Atlas SRV
+      - name: Display variables
         run: |
-          echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
-          echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf > /dev/null
+          echo "MONGODB_USERNAME=${{ MONGODB_USERNAME }}"
+          echo "MONGODB_PASSWORD=${{ MONGODB_PASSWORD }}"
       - name: Run server
         run: npm start & npx wait-on http://127.0.0.1:${{ env.PORT }}
       - name: Run tests
@@ -41,6 +41,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Output information
-        run: |        
+        run: |
           echo "MONGODB_USERNAME: ${{ env.MONGODB_USERNAME }}"
           echo "MOGODB_DB_NAME: $MONGODB_DB_NAME"
