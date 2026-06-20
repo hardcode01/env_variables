@@ -25,8 +25,10 @@ jobs:
           key: npm-deps-${{ hashFiles('**/package-lock.json') }}
       - name: Install dependencies
         run: npm ci
-      - name: Test MongoDB connectivity
-        run: nc -zv cluster0.avt7kr9.mongodb.net 27017 || echo "Cannot reach cluster"
+      - name: Fix DNS for MongoDB Atlas SRV
+        run: |
+          echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf > /dev/null
+          echo "nameserver 8.8.4.4" | sudo tee -a /etc/resolv.conf > /dev/null
       - name: Run server
         run: npm start & npx wait-on http://127.0.0.1:${{ env.PORT }}
       - name: Run tests
